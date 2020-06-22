@@ -187,6 +187,7 @@ Object {
       },
     },
   ],
+  "setup": undefined,
   "slots": Array [
     Object {
       "bindings": Array [

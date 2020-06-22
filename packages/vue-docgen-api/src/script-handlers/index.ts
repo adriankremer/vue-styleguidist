@@ -9,6 +9,7 @@ import methodHandler from './methodHandler'
 import mixinsHandler from './mixinsHandler'
 import propHandler from './propHandler'
 import slotHandler from './slotHandler'
+import setupHandler from './setupHandler'
 import { Handler } from '../parse-script'
 
 export {
@@ -20,6 +21,7 @@ export {
 	eventHandler,
 	extendsHandler,
 	methodHandler,
+	setupHandler,
 	mixinsHandler,
 	propHandler,
 	slotHandler
@@ -29,6 +31,7 @@ const defaultHandlers: Handler[] = [
 	displayNameHandler,
 	componentHandler,
 	methodHandler,
+	setupHandler,
 	propHandler,
 	eventHandler,
 	slotHandler,

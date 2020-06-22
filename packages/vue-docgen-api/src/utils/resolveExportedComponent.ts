@@ -14,7 +14,7 @@ function ignore(): boolean {
 /**
  * List of all keys that could contain documentation
  */
-const VUE_COMPONENTS_KEYS = ['data', 'props', 'methods', 'computed']
+const VUE_COMPONENTS_KEYS = ['data', 'props', 'methods', 'computed', 'setup']
 
 function isObjectExpressionComponentDefinition(node: bt.ObjectExpression): boolean {
 	return (
@@ -22,8 +22,7 @@ function isObjectExpressionComponentDefinition(node: bt.ObjectExpression): boole
 		node.properties.length === 0 ||
 		// export const compo = {data(){ return {cpm:"Button"}}
 		node.properties.some(
-			p =>
-				(bt.isObjectMethod(p) || bt.isObjectProperty(p)) && VUE_COMPONENTS_KEYS.includes(p.key.name)
+			(p) => (bt.isObjectMethod(p) || bt.isObjectProperty(p)) && VUE_COMPONENTS_KEYS.includes(p.key.name)
 		)
 	)
 }
@@ -63,9 +62,7 @@ function isComponentDefinition(path: NodePath): boolean {
  * export default Definition;
  * export var Definition = ...;
  */
-export default function resolveExportedComponent(
-	ast: bt.File
-): [Map<string, NodePath>, ImportedVariableSet] {
+export default function resolveExportedComponent(ast: bt.File): [Map<string, NodePath>, ImportedVariableSet] {
 	const components = new Map<string, NodePath>()
 	const nonComponentsIdentifiers: string[] = []
 

@@ -55,6 +55,7 @@ Object {
       },
     },
   ],
+  "setup": undefined,
   "slots": Array [
     Object {
       "description": "Use this slot default",

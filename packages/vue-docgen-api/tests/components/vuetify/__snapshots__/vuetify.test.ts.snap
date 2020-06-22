@@ -207,6 +207,7 @@ Object {
       },
     },
   ],
+  "setup": undefined,
   "slots": undefined,
   "tags": Object {},
 }

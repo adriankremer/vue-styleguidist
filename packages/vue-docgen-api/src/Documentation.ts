@@ -81,6 +81,17 @@ export interface MethodDescriptor extends Descriptor {
 	[key: string]: any
 }
 
+export interface SetupDescriptor extends Descriptor {
+	name: string
+	description?: string
+	returns?: UnnamedParam
+	throws?: UnnamedParam
+	tags?: { [key: string]: BlockTag[] }
+	params?: Param[]
+	modifiers?: string[]
+	[key: string]: any
+}
+
 export interface SlotDescriptor extends Descriptor {
 	name: string
 	description?: string
@@ -95,6 +106,7 @@ export interface ComponentDoc {
 	description?: string
 	props?: PropDescriptor[]
 	methods?: MethodDescriptor[]
+	setup?: SetupDescriptor[]
 	slots?: SlotDescriptor[]
 	events?: EventDescriptor[]
 	tags?: { [key: string]: BlockTag[] }
@@ -105,6 +117,7 @@ export interface ComponentDoc {
 export default class Documentation {
 	private propsMap: Map<string, PropDescriptor>
 	private methodsMap: Map<string, MethodDescriptor>
+	private setupMap: Map<string, SetupDescriptor>
 	private slotsMap: Map<string, SlotDescriptor>
 	private eventsMap: Map<string, any>
 	private dataMap: Map<string, any>
@@ -116,6 +129,7 @@ export default class Documentation {
 		this.componentFullfilePath = fullFilePath
 		this.propsMap = new Map()
 		this.methodsMap = new Map()
+		this.setupMap = new Map()
 		this.slotsMap = new Map()
 		this.eventsMap = new Map()
 		this.originExtendsMixin = {}
@@ -156,6 +170,12 @@ export default class Documentation {
 		}))
 	}
 
+	public getSetupDescriptor(setupName: string): SetupDescriptor {
+		return this.getDescriptor(setupName, this.setupMap, () => ({
+			name: setupName
+		}))
+	}
+
 	public getEventDescriptor(eventName: string): EventDescriptor {
 		return this.getDescriptor(eventName, this.eventsMap, () => ({
 			name: eventName
@@ -171,6 +191,7 @@ export default class Documentation {
 	public toObject(): ComponentDoc {
 		const props = this.getObjectFromDescriptor(this.propsMap)
 		const methods = this.getObjectFromDescriptor(this.methodsMap)
+		const setup = this.getObjectFromDescriptor(this.setupMap)
 		const events = this.getObjectFromDescriptor(this.eventsMap)
 		const slots = this.getObjectFromDescriptor(this.slotsMap)
 
@@ -197,6 +218,7 @@ export default class Documentation {
 			props,
 			events,
 			methods,
+			setup,
 			slots
 		}
 	}

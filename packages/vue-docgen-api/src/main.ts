@@ -8,7 +8,8 @@ import Documentation, {
 	Param,
 	Tag,
 	ParamTag,
-	ParamType
+	ParamType,
+	SetupDescriptor
 } from './Documentation'
 import { DocGenOptions, parseFile, ParseOptions, parseSource as _parseSource } from './parse'
 import * as ScriptHandlers from './script-handlers'
@@ -29,6 +30,7 @@ export {
 	SlotDescriptor,
 	EventDescriptor,
 	MethodDescriptor,
+	SetupDescriptor,
 	Param,
 	Tag,
 	ParamTag,
@@ -46,7 +48,7 @@ export async function parse(
 	filePath: string,
 	opts?: DocGenOptions | { [alias: string]: string }
 ): Promise<ComponentDoc> {
-	return (await parsePrimitive(async options => await parseFile(options), filePath, opts))[0]
+	return (await parsePrimitive(async (options) => await parseFile(options), filePath, opts))[0]
 }
 
 /**
@@ -56,7 +58,7 @@ export async function parse(
  * @param opts
  */
 export async function parseMulti(filePath: string, opts?: DocGenOptions): Promise<ComponentDoc[]> {
-	return parsePrimitive(async options => await parseFile(options), filePath, opts)
+	return parsePrimitive(async (options) => await parseFile(options), filePath, opts)
 }
 
 /**
@@ -70,21 +72,11 @@ export async function parseSource(
 	filePath: string,
 	opts?: DocGenOptions | { [alias: string]: string }
 ): Promise<ComponentDoc> {
-	return (await parsePrimitive(
-		async options => await _parseSource(source, options),
-		filePath,
-		opts
-	))[0]
+	return (await parsePrimitive(async (options) => await _parseSource(source, options), filePath, opts))[0]
 }
 
 function isOptionsObject(opts: any): opts is DocGenOptions {
-	return (
-		!!opts &&
-		(!!opts.alias ||
-			opts.jsx !== undefined ||
-			!!opts.addScriptHandlers ||
-			!!opts.addTemplateHandlers)
-	)
+	return !!opts && (!!opts.alias || opts.jsx !== undefined || !!opts.addScriptHandlers || !!opts.addTemplateHandlers)
 }
 
 async function parsePrimitive(
@@ -104,5 +96,5 @@ async function parsePrimitive(
 				validExtends: (fullFilePath: string) => !/[\\/]node_modules[\\/]/.test(fullFilePath)
 		  }
 	const docs = await createDocs(options)
-	return docs.map(d => d.toObject())
+	return docs.map((d) => d.toObject())
 }
